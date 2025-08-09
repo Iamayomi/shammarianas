@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const connectDB = async (): Promise<void> => {
   try {
-    const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/shammarianas';
+    const mongoUri = process.env.MONGODB_URI || 'mongodb+srv://E-commerceNG:Ade678@cluster0.8114dlp.mongodb.net/shammarians_new?retryWrites=true&w=majority';
     
     const conn = await mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
