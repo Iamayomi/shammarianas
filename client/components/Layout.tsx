@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Search, ShoppingCart, User, Menu, X, LogOut } from "lucide-react";
+import "../style.css"
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -294,7 +295,7 @@ export default function Layout({ children }: LayoutProps) {
           </div>
         </Link>
 
-        <SearchComponent />
+        {/* <SearchComponent /> */}
 
         <div className="right">
           <div className="nav_buttons">
