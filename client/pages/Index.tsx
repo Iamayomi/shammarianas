@@ -20,37 +20,34 @@ export default function Index() {
           style={{ backgroundImage: "url('/assets/imgs/background/bg5.jpg')" }}
         >
           {/* Dark overlay */}
-          {/* <div className="absolute inset-0 bg-black/70"></div> */}
+          <div className="absolute inset-0 bg-black/70"></div>
 
           {/* Content */}
-          <div className="relative container mx-auto px-5 py-10 sm:py-20">
-            <div className="flex flex-col w-full sm:w-11/12 mx-auto my-6 sm:my-10">
-              <div className="caption mb-6 sm:mb-10 text-center sm:text-left">
-                <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-8 md:mb-12">
+          <div className="relative container mx-auto px-4 py-20">
+            <div className="flex flex-col lg:w-11/12">
+              <div className="caption mb-10">
+                <h1 className="text-2xl sm:text-4xl font-bold">
                   Top Advertising Agency :
                 </h1>
-                <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold">
+                <h1 className="text-3xl sm:text-5xl font-bold">
                   Elevate Your <span className="text-purple-500">Brand</span>{" "}
                   Today
                 </h1>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center sm:justify-between sm:m-0 max-w-6xl mx-auto">
-              {/* Arrow Down */}
-              <div className="flex justify-center sm:justify-start order-2 sm:order-1 sm:ml-12 mt-6 sm:mt-0">
+            <div className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div className="flex justify-center md:order-2">
                 <img
                   src="/assets/imgs/icon-img/arrow-down-big.png"
                   alt="Arrow Down"
-                  className="w-[100px] sm:max-w-[150px]"
+                  className="max-w-[150px]"
                 />
               </div>
-
-              {/* Text Section */}
-              <div className="flex justify-center sm:justify-end order-1 sm:order-2">
-                <div className="text-start">
-                  <h2 className="text-3xl sm:text-4xl font-bold mb-2">6k +</h2>
-                  <h6 className="text-base sm:text-lg">
+              <div className="flex justify-center md:justify-end md:order-1">
+                <div className="text-center md:text-right">
+                  <h2 className="text-4xl font-bold mb-2">6k +</h2>
+                  <h6 className="text-lg">
                     Projects completed <br />
                     <span className="text-purple-500">successfully</span>
                   </h6>
@@ -61,7 +58,7 @@ export default function Index() {
         </header>
 
         {/* Stats Section */}
-        <section className="py-16  bg-black/70">
+        <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {stats.map((stat, index) => (
@@ -76,14 +73,14 @@ export default function Index() {
           </div>
         </section>
 
-        <section className="intro section-padding m-12">
+        <section className="intro section-padding">
           <div className="container">
-            <div className="flex flex-col lg:flex-row lg:gap-12">
+            <div className="row lg-marg">
               {/* Left Content */}
-              <div className="w-full lg:w-8/12 mb-10 lg:mb-0">
-                <div className="flex flex-col md:flex-row items-center gap-10">
-                  <div className="w-full md:w-1/2">
-                    <div className="img1">
+              <div className="col-lg-8 md-mb80">
+                <div className="row lg-marg align-items-center">
+                  <div className="col-md-6">
+                    <div className="img1 sm-mb50">
                       <img
                         src="/assets/imgs/intro/04.webp"
                         alt="Intro Image"
@@ -91,17 +88,17 @@ export default function Index() {
                       />
                     </div>
                   </div>
-                  <div className="w-full md:w-1/2">
+                  <div className="col-md-6">
                     <div className="text">
-                      <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-snug mb-6">
+                      <h3 className="mb-30">
                         Sham Marianas{" "}
-                        <span className="font-light block sm:inline">
+                        <span className="fw-300">
                           Powering Creativity & Boosting Digital Growth with Top
                           Advertising Strategies
                         </span>
                       </h3>
-                      <p className="align-text text-justify text-sm leading-relaxed tracking-wide mt-6 mb-8">
-                        <span className=" text-purple-500 text-lg">
+                      <p className="align-text">
+                        <span className="text-bold underline main-color">
                           Sham Marianas
                         </span>{" "}
                         is a top advertising agency that helps businesses grow
@@ -112,46 +109,55 @@ export default function Index() {
                         grow your company to new heights!
                       </p>
 
-                      <Link
-                        to="/about"
-                        className="underline text-purple-500 mt-40"
-                      >
+                      <a href="/about" className="underline main-color mt-40">
                         <span className="text">
                           More About Us <i className="ti-arrow-top-right"></i>
                         </span>
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 </div>
 
                 {/* Numbers Section */}
-                <div className="numbers mt-16">
-                  <div className="flex flex-col md:flex-row gap-8">
-                    <div className="flex-1 border-t pt-6 flex items-end gap-4">
-                      <div>
-                        <h3 className="text-2xl mb-2">100%</h3>
-                        <h6 className="font-bold">Clients Satisfaction</h6>
-                      </div>
-                      <div className="ml-auto">
-                        <img
-                          src="/assets/imgs/arrow-image.webp"
-                          alt="Arrow Icon"
-                          className="w-10 h-auto"
-                        />
+                <div className="numbers mt-80">
+                  <div className="row lg-marg">
+                    <div className="col-md-6">
+                      <div className="item bord-thin-top pt-30 d-flex align-items-end mt-20">
+                        <div>
+                          <h3 className="fw-300 mb-10">100%</h3>
+                          <h6 className="p-color sub-title">
+                            Clients Satisfaction
+                          </h6>
+                        </div>
+                        <div className="ml-auto">
+                          <div className="icon-img-40">
+                            <img
+                              src="/assets/imgs/arrow-image.webp"
+                              alt="Arrow Icon"
+                              className="w-10 h-auto"
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex-1 border-t pt-6 flex items-end gap-4">
-                      <div>
-                        <h3 className="text-2xl mb-2">6745</h3>
-                        <h6 className="font-bold">Projects Completed</h6>
-                      </div>
-                      <div className="ml-auto">
-                        <img
-                          src="/assets/imgs/arrow-image.webp"
-                          alt="Arrow Icon"
-                          className="w-10 h-auto"
-                        />
+                    <div className="col-md-6">
+                      <div className="item bord-thin-top pt-30 d-flex align-items-end mt-20">
+                        <div>
+                          <h3 className="fw-300 mb-10">6745</h3>
+                          <h6 className="p-color sub-title">
+                            Projects Completed
+                          </h6>
+                        </div>
+                        <div className="ml-auto">
+                          <div className="icon-img-40">
+                            <img
+                              src="/assets/imgs/arrow-image.webp"
+                              alt="Arrow Icon"
+                              className="w-10 h-auto"
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -159,7 +165,7 @@ export default function Index() {
               </div>
 
               {/* Right Image */}
-              <div className="w-full lg:w-4/12">
+              <div className="col-lg-4">
                 <div className="img-full fit-img">
                   <img
                     src="/assets/imgs/intro/04.jpg"
