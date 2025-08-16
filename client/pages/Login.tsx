@@ -20,7 +20,7 @@ export default function Login() {
   // Redirect already authenticated users
   useEffect(() => {
     if (!loading && user) {
-      if (user.role === 'admin') {
+      if (user.role === "admin") {
         navigate("/admin");
       } else {
         navigate("/dashboard");
@@ -36,13 +36,13 @@ export default function Login() {
       await login(email, password);
 
       // Get the updated user data from localStorage after login
-      const userData = localStorage.getItem('user');
+      const userData = localStorage.getItem("user");
       const user = userData ? JSON.parse(userData) : null;
 
       toast.success("Welcome back!");
 
       // Redirect based on user role
-      if (user && user.role === 'admin') {
+      if (user && user.role === "admin") {
         navigate("/admin");
       } else {
         navigate("/dashboard");
@@ -59,7 +59,9 @@ export default function Login() {
       <div className="min-h-[80vh] flex items-center justify-center py-12">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Welcome Back</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">
+              Welcome Back
+            </CardTitle>
             <p className="text-gray-600 text-center">
               Sign in to your shammarianas account
             </p>
@@ -81,7 +83,7 @@ export default function Login() {
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
                 <div className="relative">
@@ -100,13 +102,17 @@ export default function Login() {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
               </div>
 
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full bg-purple-600 hover:bg-purple-700"
                 disabled={isLoading}
               >
@@ -116,7 +122,10 @@ export default function Login() {
 
             <div className="mt-6 text-center text-sm">
               <span className="text-gray-600">Don't have an account? </span>
-              <Link to="/register" className="text-purple-600 hover:text-purple-700 font-medium">
+              <Link
+                to="/register"
+                className="text-purple-600 hover:text-purple-700 font-medium"
+              >
                 Sign up
               </Link>
             </div>
