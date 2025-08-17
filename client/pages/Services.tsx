@@ -464,57 +464,27 @@ export default function Services() {
     <Layout>
       <div className="min-h-screen bg-background">
         {/* Hero Header */}
-        <header className="relative bg-gradient-to-r from-purple-900 via-purple-800 to-indigo-900 text-white py-20 overflow-hidden">
-          <div className="absolute inset-0 bg-black/20"></div>
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-blue-600/20"></div>
-            <div className="absolute top-10 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-10 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-          </div>
-
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                Our Services
-              </h1>
-              <p className="text-xl md:text-2xl text-gray-300 mb-8">
-                Comprehensive digital solutions to grow your business
-              </p>
-
-              <div className="flex flex-wrap justify-center gap-6 text-sm">
-                <div className="flex items-center gap-2">
-                  <Rocket className="h-5 w-5 text-purple-400" />
-                  <span>Full-Stack Development</span>
+        <header
+          className="page-header bg-img section-padding valign"
+          style={{
+            backgroundImage: "url('/assets/imgs/background/bg4.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        >
+          <div className="container pt-80">
+            <div className="row">
+              <div className="col-12">
+                <div className="text-center">
+                  <div className="container mx-auto px-4 relative z-10">
+                    <div className="text-center max-w-4xl mx-auto">
+                      <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                        Our Services
+                      </h1>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-blue-400" />
-                  <span>Digital Strategy</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Lightbulb className="h-5 w-5 text-yellow-400" />
-                  <span>Innovation Consulting</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <HeadphonesIcon className="h-5 w-5 text-green-400" />
-                  <span>24/7 Support</span>
-                </div>
-              </div>
-
-              <div className="mt-8">
-                <Button
-                  size="lg"
-                  className="bg-white text-purple-900 hover:bg-gray-100 mr-4"
-                >
-                  Get Started
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-white text-white hover:bg-white hover:text-purple-900"
-                >
-                  <Play className="h-4 w-4 mr-2" />
-                  Watch Demo
-                </Button>
               </div>
             </div>
           </div>
