@@ -2,7 +2,11 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./client/**/*.{ts,tsx}"],
+  content: [
+    "./client/**/*.{ts,tsx}",
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/swiper/**/*.js",
+  ],
   prefix: "",
   theme: {
     container: {

@@ -1,464 +1,190 @@
 import { useEffect, useState } from "react";
-import {
-  Code,
-  Smartphone,
-  Palette,
-  Globe,
-  Search,
-  BarChart3,
-  Shield,
-  Zap,
-  CheckCircle,
-  ArrowRight,
-  Star,
-  Clock,
-  Users,
-  Award,
-  MessageCircle,
-  Mail,
-  Phone,
-  MapPin,
-  Play,
-  TrendingUp,
-  Target,
-  Lightbulb,
-  Settings,
-  HeadphonesIcon,
-  Rocket,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowLeft, ArrowRight, ArrowUp } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
 import Layout from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
-import { toast } from "sonner";
-
-interface Service {
-  _id: string;
-  title: string;
-  description: string;
-  shortDescription: string;
-  icon: string;
-  image?: string;
-  features: string[];
-  pricing?: {
-    basic?: number;
-    pro?: number;
-    enterprise?: number;
-  };
-  featured: boolean;
-  status: "draft" | "published";
-  authorName: string;
-  createdAt: string;
-  category: string;
-  timeline: string;
-  testimonials?: {
-    name: string;
-    role: string;
-    company: string;
-    content: string;
-    rating: number;
-  }[];
-}
-
-interface ContactForm {
-  name: string;
-  email: string;
-  company: string;
-  service: string;
-  budget: string;
-  message: string;
-}
-
-const SERVICE_CATEGORIES = [
-  "All",
-  "Web Development",
-  "Mobile Development",
-  "UI/UX Design",
-  "Digital Marketing",
-  "Consulting",
-  "Maintenance & Support",
-];
-
-const getServiceIcon = (iconName: string) => {
-  const icons: Record<string, any> = {
-    code: <Code className="h-8 w-8" />,
-    smartphone: <Smartphone className="h-8 w-8" />,
-    palette: <Palette className="h-8 w-8" />,
-    globe: <Globe className="h-8 w-8" />,
-    search: <Search className="h-8 w-8" />,
-    barchart: <BarChart3 className="h-8 w-8" />,
-    shield: <Shield className="h-8 w-8" />,
-    zap: <Zap className="h-8 w-8" />,
-    settings: <Settings className="h-8 w-8" />,
-    headphones: <HeadphonesIcon className="h-8 w-8" />,
-  };
-  return icons[iconName] || <Code className="h-8 w-8" />;
-};
 
 export default function Services() {
   const { user, token } = useAuth();
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [activeService, setActiveService] = useState<string | null>(null);
-  const [contactForm, setContactForm] = useState<ContactForm>({
-    name: "",
-    email: "",
-    company: "",
-    service: "",
-    budget: "",
-    message: "",
-  });
 
-  useEffect(() => {
-    fetchServices();
-  }, [user, token]);
+  const [openIndex, setOpenIndex] = useState(null);
 
-  const fetchServices = async () => {
-    try {
-      // Try to fetch from admin endpoint if user is admin, otherwise use demo data
-      if (user?.role === "admin" && token) {
-        const response = await fetch("/api/admin/services", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (response.ok) {
-          const servicesData = await response.json();
-          setServices(servicesData.services || []);
-        } else {
-          setDemoServices();
-        }
-      } else {
-        setDemoServices();
-      }
-    } catch (error) {
-      console.error("Error fetching services:", error);
-      setDemoServices();
-    } finally {
-      setLoading(false);
-    }
+  const toggleAccordion = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
   };
+  const accordionData = [
+    {
+      title: "Tailored Strategies",
+      content:
+        "At Sham Marianas, we believe in tailored strategies — because one size never fits all. Backed by in-depth research and the power of AI, we create smart, data-driven solutions that take your brand to the next level with precision and innovation.",
+    },
+    {
+      title: "Expertise",
+      content:
+        "With over 12 years in brand marketing, we’ve collaborated with diverse industries, offering deep insights and delivering tailored solutions that drive impactful results.",
+    },
+    {
+      title: "Affordable Plans",
+      content:
+        "We know every business is different, whether you're new or well-established. That's why we offer affordable packages that fit your business's size and needs.",
+    },
+    {
+      title: "Impactful Outcomes",
+      content:
+        "After working with countless clients, we've learned what truly works. Our team is dedicated to providing solutions that get real, measurable results for your business.",
+    },
+    {
+      title: "At Your Services",
+      content:
+        "We prioritize your concerns, responding within 24 hours. Our team is always available to assist with any urgent needs or emergencies.",
+    },
+  ];
 
-  const setDemoServices = () => {
-    const demoServices: Service[] = [
-      {
-        _id: "1",
-        title: "Custom Web Development",
-        description:
-          "Build powerful, scalable web applications tailored to your business needs using cutting-edge technologies and best practices.",
-        shortDescription:
-          "Custom web applications built with modern technologies",
-        icon: "code",
-        image: "/placeholder.svg",
-        features: [
-          "Responsive Design",
-          "Modern Framework (React, Vue, Angular)",
-          "Database Integration",
-          "API Development",
-          "SEO Optimization",
-          "Performance Optimization",
-          "Security Implementation",
-          "Cross-browser Compatibility",
-        ],
-        pricing: {
-          basic: 2500,
-          pro: 5000,
-          enterprise: 10000,
-        },
-        featured: true,
-        status: "published",
-        authorName: "Development Team",
-        createdAt: new Date().toISOString(),
-        category: "Web Development",
-        timeline: "4-8 weeks",
-        testimonials: [
-          {
-            name: "Sarah Johnson",
-            role: "CEO",
-            company: "TechStart Inc.",
-            content:
-              "Outstanding web development service. They delivered exactly what we needed and more.",
-            rating: 5,
-          },
-        ],
-      },
-      {
-        _id: "2",
-        title: "Mobile App Development",
-        description:
-          "Create engaging mobile applications for iOS and Android platforms with native performance and modern user experiences.",
-        shortDescription: "Native and cross-platform mobile applications",
-        icon: "smartphone",
-        features: [
-          "Native iOS & Android Development",
-          "Cross-platform Solutions (React Native, Flutter)",
-          "App Store Deployment",
-          "Push Notifications",
-          "Offline Functionality",
-          "Payment Integration",
-          "Analytics Implementation",
-          "Maintenance & Updates",
-        ],
-        pricing: {
-          basic: 5000,
-          pro: 10000,
-          enterprise: 20000,
-        },
-        featured: true,
-        status: "published",
-        authorName: "Mobile Team",
-        createdAt: new Date(Date.now() - 86400000).toISOString(),
-        category: "Mobile Development",
-        timeline: "6-12 weeks",
-        testimonials: [
-          {
-            name: "Michael Chen",
-            role: "Product Manager",
-            company: "InnovateCorp",
-            content:
-              "The mobile app exceeded our expectations. Great performance and user experience.",
-            rating: 5,
-          },
-        ],
-      },
-      {
-        _id: "3",
-        title: "UI/UX Design Services",
-        description:
-          "Design beautiful, intuitive user interfaces and experiences that engage users and drive conversions.",
-        shortDescription: "User-centered design and interface development",
-        icon: "palette",
-        features: [
-          "User Research & Analysis",
-          "Wireframing & Prototyping",
-          "Visual Design",
-          "Interaction Design",
-          "Usability Testing",
-          "Design System Creation",
-          "Brand Integration",
-          "Responsive Design",
-        ],
-        pricing: {
-          basic: 1500,
-          pro: 3000,
-          enterprise: 6000,
-        },
-        featured: false,
-        status: "published",
-        authorName: "Design Team",
-        createdAt: new Date(Date.now() - 172800000).toISOString(),
-        category: "UI/UX Design",
-        timeline: "3-6 weeks",
-      },
-      {
-        _id: "4",
-        title: "E-commerce Solutions",
-        description:
-          "Complete e-commerce platforms with payment processing, inventory management, and customer analytics.",
-        shortDescription: "Full-featured online stores and marketplaces",
-        icon: "globe",
-        features: [
-          "Custom E-commerce Platform",
-          "Payment Gateway Integration",
-          "Inventory Management",
-          "Order Processing",
-          "Customer Management",
-          "Analytics & Reporting",
-          "Multi-vendor Support",
-          "Mobile Optimization",
-        ],
-        pricing: {
-          basic: 3000,
-          pro: 7000,
-          enterprise: 15000,
-        },
-        featured: true,
-        status: "published",
-        authorName: "E-commerce Team",
-        createdAt: new Date(Date.now() - 259200000).toISOString(),
-        category: "Web Development",
-        timeline: "6-10 weeks",
-      },
-      {
-        _id: "5",
-        title: "Digital Marketing & SEO",
-        description:
-          "Boost your online presence with comprehensive digital marketing strategies and search engine optimization.",
-        shortDescription: "SEO, content marketing, and digital strategy",
-        icon: "search",
-        features: [
-          "SEO Optimization",
-          "Content Strategy",
-          "Social Media Marketing",
-          "PPC Campaign Management",
-          "Email Marketing",
-          "Analytics & Reporting",
-          "Conversion Optimization",
-          "Brand Management",
-        ],
-        pricing: {
-          basic: 1000,
-          pro: 2500,
-          enterprise: 5000,
-        },
-        featured: false,
-        status: "published",
-        authorName: "Marketing Team",
-        createdAt: new Date(Date.now() - 345600000).toISOString(),
-        category: "Digital Marketing",
-        timeline: "3-6 months",
-      },
-      {
-        _id: "6",
-        title: "Business Intelligence & Analytics",
-        description:
-          "Transform your data into actionable insights with custom dashboards and analytics solutions.",
-        shortDescription: "Data visualization and business intelligence",
-        icon: "barchart",
-        features: [
-          "Custom Dashboards",
-          "Data Visualization",
-          "Real-time Analytics",
-          "Reporting Automation",
-          "Data Integration",
-          "KPI Tracking",
-          "Predictive Analytics",
-          "Performance Monitoring",
-        ],
-        pricing: {
-          basic: 2000,
-          pro: 4500,
-          enterprise: 8000,
-        },
-        featured: false,
-        status: "published",
-        authorName: "Analytics Team",
-        createdAt: new Date(Date.now() - 432000000).toISOString(),
-        category: "Consulting",
-        timeline: "4-8 weeks",
-      },
-      {
-        _id: "7",
-        title: "Cloud Infrastructure & DevOps",
-        description:
-          "Scalable cloud solutions with automated deployment, monitoring, and security best practices.",
-        shortDescription:
-          "Cloud hosting, DevOps, and infrastructure management",
-        icon: "shield",
-        features: [
-          "Cloud Migration",
-          "Infrastructure as Code",
-          "CI/CD Pipeline Setup",
-          "Monitoring & Logging",
-          "Security Implementation",
-          "Performance Optimization",
-          "Backup Solutions",
-          "24/7 Support",
-        ],
-        pricing: {
-          basic: 1500,
-          pro: 3500,
-          enterprise: 7000,
-        },
-        featured: false,
-        status: "published",
-        authorName: "DevOps Team",
-        createdAt: new Date(Date.now() - 518400000).toISOString(),
-        category: "Consulting",
-        timeline: "2-4 weeks",
-      },
-      {
-        _id: "8",
-        title: "Maintenance & Support",
-        description:
-          "Ongoing maintenance, updates, and technical support to keep your applications running smoothly.",
-        shortDescription: "Ongoing support and maintenance services",
-        icon: "headphones",
-        features: [
-          "Regular Updates",
-          "Bug Fixes",
-          "Security Patches",
-          "Performance Monitoring",
-          "Technical Support",
-          "Backup Management",
-          "Server Maintenance",
-          "Emergency Response",
-        ],
-        pricing: {
-          basic: 500,
-          pro: 1000,
-          enterprise: 2000,
-        },
-        featured: false,
-        status: "published",
-        authorName: "Support Team",
-        createdAt: new Date(Date.now() - 604800000).toISOString(),
-        category: "Maintenance & Support",
-        timeline: "Ongoing",
-      },
-    ];
+  const testimonials = [
+    {
+      title: "Project Manager",
+      text: "With Sham-Marianas expert strategies and innovative solutions, we optimized our operations and unlocked new growth opportunities, setting us on the path to success.",
+      name: "Rami Al-Hassan",
+      role: "Project Manager",
+      image: "/assets/imgs/testim/t2.jpg",
+    },
+    {
+      title: "Business Development Director",
+      text: "Working with Sham Marianas has been an absolute game-changer! Their team’s creativity and strategic brilliance completely transformed our brand identity",
+      name: "Faisal Nasser",
+      role: "Business Development Director",
+      image: "/assets/imgs/testim/t3.jpg",
+    },
+    {
+      title: "Chief Marketing Officer (CMO)",
+      text: "We gave Sham-Marianas a challenging task—to simplify a complex issue and engage key stakeholders. They delivered an innovative, compelling solution that captured attention and drove results.",
+      name: "Omar Farid",
+      role: "Chief Marketing Officer (CMO)",
+      image: "/assets/imgs/testim/t4.jpg",
+    },
 
-    setServices(demoServices);
-  };
+    {
+      title: "Executive Assistant (Germany)",
+      text: "Sham-Marianas impressed us with their unique and innovative approach. Their solution received overwhelming praise from our leadership team.",
+      name: "Anja Schmidt",
+      role: "Executive Assistant (Germany)",
+      image: "/assets/imgs/testim/1.jpg",
+    },
+    {
+      title: "On-page SEO Specialist (Germany)",
+      text: "Sham-MarianSall delivered impactful and creative solutions that strengthened our community outreach efforts.",
+      name: "Julia Müller",
+      role: "On-page SEO Specialist (Germany)",
+      image: "/assets/imgs/testim/t1.jpg",
+    },
+  ];
 
-  const filteredServices = services.filter((service) => {
-    const matchesCategory =
-      selectedCategory === "All" || service.category === selectedCategory;
-    return matchesCategory && service.status === "published";
-  });
+  const services = [
+    {
+      num: "01",
+      slug: "branding",
+      category: "Branding Design",
+      title: "Creative Identity",
+      description:
+        "Our branding design creates strong brand identities that attract audiences, build recognition, and grow businesses for long-term success.",
+      img: "/assets/imgs/serv-img/1.jpg",
+    },
+    {
+      num: "02",
+      slug: "uiux-design",
+      category: "UI-UX Design",
+      title: "User Experience",
+      description:
+        "We offer UI/UX design that creates smooth, user-friendly experiences that boost engagement, conversions, and brand success, making every interaction seamless and enjoyable.",
+      img: "/assets/imgs/serv-img/2.jpg",
+    },
+    {
+      num: "03",
+      slug: "web-design",
+      category: "Web Development",
+      title: "Innovative Solutions",
+      description:
+        "At Sham Marianas, we build cutting-edge web development solutions that blend innovation, performance, and seamless user experiences to help businesses thrive online.",
+      img: "/assets/imgs/serv-img/3.jpg",
+    },
+    {
+      num: "04",
+      slug: "ecommerce",
+      category: "E-Commerce Solutions",
+      title: "Seamless Shopping",
+      description:
+        "We build e-commerce solutions that make online selling seamless and profitable. Our expert services enhance customer reach, conversions, and sales growth",
+      img: "/assets/imgs/serv-img/4.jpg",
+    },
+    {
+      num: "05",
+      slug: "content",
+      category: "Content Writing",
+      title: "SEO-Optimized Content",
+      description:
+        "We create SEO-friendly content writing that captures attention, builds authority, and boosts online presence.",
+      img: "/assets/imgs/serv-img/5.jpg",
+    },
+    {
+      num: "06",
+      slug: "product",
+      category: "Product Design",
+      title: "User-Centric Design",
+      description:
+        "We provide the best product design, creating seamless, user-focused experiences that drive engagement, innovation, and business success.",
+      img: "/assets/imgs/serv-img/6.jpg",
+    },
+    {
+      num: "07",
+      slug: "digital",
+      category: "Social Media & Digital Marketing",
+      title: "Brand Growth",
+      description:
+        "We help businesses grow with social media & digital marketing, increasing brand awareness, interaction, and online reach.",
+      img: "/assets/imgs/serv-img/7.jpg",
+    },
+    {
+      num: "08",
+      slug: "video-production",
+      category: "Photography & Video Production",
+      title: "Visual Storytelling",
+      description:
+        "We deliver photography & video production that captures your brand’s story, enhancing engagement, visibility, and trust with high-impact visuals.",
+      img: "/assets/imgs/serv-img/8.jpg",
+    },
+    {
+      num: "09",
+      slug: "vfx",
+      category: "VFX and CGI ADs",
+      title: "High-Impact Visuals",
+      description:
+        "We design eye-catching VFX and CGI ads that boost brand visibility, engagement, and audience impact with stunning, high-quality visuals.",
+      img: "/assets/imgs/serv-img/9.jpg",
+    },
+    {
+      num: "10",
+      slug: "printing",
+      category: "Print Media Solution",
+      title: "Effective Branding",
+      description:
+        "We craft print media solutions that boost brand visibility, marketing impact, and audience engagement with high-quality designs and materials.",
+      img: "/assets/imgs/serv-img/10.jpg",
+    },
+  ];
 
-  const featuredServices = services.filter(
-    (s) => s.featured && s.status === "published",
-  );
-
-  const handleContactSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Simulate form submission
-    try {
-      // In a real app, this would send to your backend
-      toast.success(
-        "Thank you for your inquiry! We'll get back to you within 24 hours.",
-      );
-      setContactForm({
-        name: "",
-        email: "",
-        company: "",
-        service: "",
-        budget: "",
-        message: "",
-      });
-    } catch (error) {
-      toast.error("Failed to send message. Please try again.");
-    }
-  };
-
-  if (loading) {
-    return (
-      <Layout>
-        <div className="min-h-[60vh] flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-            <p className="text-gray-400">Loading services...</p>
-          </div>
-        </div>
-      </Layout>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <Layout>
+  //       <div className="min-h-[60vh] flex items-center justify-center">
+  //         <div className="text-center">
+  //           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+  //           <p className="text-gray-400">Loading services...</p>
+  //         </div>
+  //       </div>
+  //     </Layout>
+  //   );
+  // }
 
   return (
     <Layout>
@@ -490,587 +216,172 @@ export default function Services() {
           </div>
         </header>
 
-        {/* Featured Services */}
-        {featuredServices.length > 0 && (
-          <section className="py-16 bg-gray-900/20">
-            <div className="container mx-auto px-4">
-              <div className="flex items-center gap-3 mb-8">
-                <Star className="h-6 w-6 text-yellow-400" />
-                <h2 className="text-2xl font-bold text-white">
-                  Featured Services
-                </h2>
-              </div>
+        <section className=" text-white py-16">
+          <div className="container mx-auto px-6 lg:px-20 mt-16">
+            {/* Header */}
+            <p className="text-purple-400 uppercase tracking-widest text-sm mb-2">
+              Our Specializations
+            </p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-12  border-b border-gray-800 pb-12">
+              Featured <span className="font-light">Services</span>
+            </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {featuredServices.map((service) => (
-                  <Card
-                    key={service._id}
-                    className="group bg-gray-900/50 border-gray-700 hover:border-gray-600 transition-all duration-300 overflow-hidden"
-                  >
-                    <CardHeader className="pb-4">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="w-16 h-16 bg-purple-600/20 rounded-lg flex items-center justify-center text-purple-400">
-                          {getServiceIcon(service.icon)}
-                        </div>
-                        <Badge className="bg-yellow-600 text-black font-medium">
-                          <Star className="h-3 w-3 mr-1" />
-                          Featured
-                        </Badge>
-                      </div>
-                      <CardTitle className="text-xl text-white group-hover:text-purple-400 transition-colors">
-                        {service.title}
-                      </CardTitle>
-                      <p className="text-gray-400 text-sm">
-                        {service.shortDescription}
-                      </p>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-300 mb-4 line-clamp-3">
-                        {service.description}
-                      </p>
-
-                      <div className="flex items-center justify-between text-sm text-gray-400 mb-4">
-                        <div className="flex items-center gap-2">
-                          <Clock className="h-4 w-4" />
-                          <span>{service.timeline}</span>
-                        </div>
-                        {service.pricing && (
-                          <div className="text-purple-400 font-medium">
-                            From ${service.pricing.basic?.toLocaleString()}
-                          </div>
-                        )}
-                      </div>
-
-                      <Button className="w-full bg-purple-600 hover:bg-purple-700">
-                        Learn More
-                        <ArrowRight className="h-4 w-4 ml-2" />
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Services Section */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-white mb-4">
-                All Services
-              </h2>
-              <p className="text-gray-400 max-w-2xl mx-auto">
-                Choose from our comprehensive range of digital services designed
-                to meet your specific needs and goals.
-              </p>
-            </div>
-
-            {/* Category Filter */}
-            <div className="flex flex-wrap justify-center gap-3 mb-12">
-              {SERVICE_CATEGORIES.map((category) => (
-                <Button
-                  key={category}
-                  variant={
-                    selectedCategory === category ? "default" : "outline"
-                  }
-                  size="sm"
-                  onClick={() => setSelectedCategory(category)}
-                  className={
-                    selectedCategory === category
-                      ? "bg-purple-600 hover:bg-purple-700"
-                      : "border-gray-600 text-gray-300 hover:bg-gray-800"
-                  }
+            {/* Service List */}
+            <div className="space-y-16">
+              {services.map((service, index) => (
+                <div
+                  key={service.slug}
+                  className="grid grid-cols-1 md:grid-cols-2 items-center gap-10 border-b pb-12"
                 >
-                  {category}
-                </Button>
-              ))}
-            </div>
-
-            {/* Services Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredServices.map((service) => (
-                <Card
-                  key={service._id}
-                  className="group bg-gray-900/50 border-gray-700 hover:border-gray-600 transition-all duration-300 cursor-pointer"
-                  onClick={() =>
-                    setActiveService(
-                      activeService === service._id ? null : service._id,
-                    )
-                  }
-                >
-                  <CardHeader className="pb-4">
-                    <div className="w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center text-purple-400 mb-3">
-                      {getServiceIcon(service.icon)}
+                  {/* Left Side */}
+                  <div>
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-12 h-12 flex items-center justify-center border rounded-full border-gray-600 text-sm">
+                        {service.num}
+                      </div>
+                      <span className="text-purple-400 uppercase text-sm tracking-wide">
+                        {service.category}
+                      </span>
                     </div>
-                    <CardTitle className="text-lg text-white group-hover:text-purple-400 transition-colors">
-                      {service.title}
-                    </CardTitle>
-                    <p className="text-gray-400 text-sm">
-                      {service.shortDescription}
+                    <h3 className="text-3xl font-bold mb-4">
+                      <span className="font-extrabold">
+                        {service.title.split(" ")[0]}
+                      </span>{" "}
+                      {service.title.split(" ").slice(1).join(" ")}
+                    </h3>
+                    <p className="text-gray-300 text-sm leading-relaxed max-w-lg">
+                      {service.description}
                     </p>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center justify-between text-sm text-gray-400 mb-3">
-                      <div className="flex items-center gap-2">
-                        <Clock className="h-3 w-3" />
-                        <span>{service.timeline}</span>
-                      </div>
-                      {service.pricing && (
-                        <div className="text-purple-400 font-medium text-xs">
-                          ${service.pricing.basic?.toLocaleString()}+
-                        </div>
-                      )}
-                    </div>
+                  </div>
 
-                    {activeService === service._id && (
-                      <div className="mt-4 p-4 bg-gray-800/50 rounded-lg">
-                        <h4 className="text-white font-medium mb-2">
-                          Key Features:
-                        </h4>
-                        <ul className="text-gray-400 text-sm space-y-1">
-                          {service.features
-                            .slice(0, 4)
-                            .map((feature, index) => (
-                              <li
-                                key={index}
-                                className="flex items-center gap-2"
-                              >
-                                <CheckCircle className="h-3 w-3 text-green-400 flex-shrink-0" />
-                                {feature}
-                              </li>
-                            ))}
-                        </ul>
-
-                        {service.pricing && (
-                          <div className="mt-3 pt-3 border-t border-gray-700">
-                            <div className="flex justify-between items-center">
-                              <div className="text-xs text-gray-400">
-                                <div>
-                                  Basic: $
-                                  {service.pricing.basic?.toLocaleString()}
-                                </div>
-                                <div>
-                                  Pro: ${service.pricing.pro?.toLocaleString()}
-                                </div>
-                                <div>
-                                  Enterprise: $
-                                  {service.pricing.enterprise?.toLocaleString()}
-                                </div>
-                              </div>
-                              <Button
-                                size="sm"
-                                className="bg-purple-600 hover:bg-purple-700"
-                              >
-                                Get Quote
-                              </Button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
+                  {/* Right Side (Image) */}
+                  <div className="flex justify-center">
+                    <img
+                      src={service.img}
+                      alt={service.title}
+                      className="rounded-full w-80 h-48 object-cover"
+                    />
+                  </div>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Process Section */}
-        <section className="py-16 bg-gray-900/30">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-white mb-4">
-                Our Process
-              </h2>
-              <p className="text-gray-400 max-w-2xl mx-auto">
-                We follow a proven methodology to ensure successful project
-                delivery and client satisfaction.
-              </p>
+        {/* why choose us Section */}
+        <section className="py-20 bg-black text-white border-b">
+          <div className="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center mt-12">
+            {/* Left Image */}
+            <div className="relative">
+              <img src="/assets/imgs/arw2.png" alt="arrow design" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[
-                {
-                  step: "01",
-                  title: "Discovery & Planning",
-                  description:
-                    "We analyze your requirements and create a detailed project roadmap.",
-                  icon: <Target className="h-8 w-8" />,
-                },
-                {
-                  step: "02",
-                  title: "Design & Prototyping",
-                  description:
-                    "Create wireframes and prototypes to visualize the solution.",
-                  icon: <Palette className="h-8 w-8" />,
-                },
-                {
-                  step: "03",
-                  title: "Development & Testing",
-                  description:
-                    "Build the solution using best practices and thorough testing.",
-                  icon: <Code className="h-8 w-8" />,
-                },
-                {
-                  step: "04",
-                  title: "Launch & Support",
-                  description:
-                    "Deploy your solution and provide ongoing support and maintenance.",
-                  icon: <Rocket className="h-8 w-8" />,
-                },
-              ].map((process, index) => (
-                <Card
-                  key={index}
-                  className="bg-gray-900/50 border-gray-700 text-center"
-                >
-                  <CardContent className="p-6">
-                    <div className="w-16 h-16 bg-purple-600/20 rounded-full flex items-center justify-center text-purple-400 mx-auto mb-4">
-                      {process.icon}
+            {/* Right Content */}
+            <div className="p-6">
+              <h6 className="uppercase text-purple-400 mb-6">Why choose us?</h6>
+              <h3 className="text-3xl md:text-4xl font-bold mb-10">
+                We exceed expectations by blending creativity,
+                <br />
+                expertise, and innovation to drive your success.
+              </h3>
+
+              <div className="divide-y divide overflow-hidden border-t border-b">
+                {accordionData.map((item, index) => (
+                  <div key={index}>
+                    <button
+                      onClick={() => toggleAccordion(index)}
+                      className="w-full flex justify-between items-center py-4 px-6 text-left focus:outline-none"
+                    >
+                      <h6 className="text-lg font-semibold">{item.title}</h6>
+                      <span className="text-xl">
+                        {openIndex === index ? "x" : "+"}
+                      </span>
+                    </button>
+
+                    <div
+                      className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${
+                        openIndex === index ? "max-h-40 pb-4" : "max-h-0"
+                      }`}
+                    >
+                      <p className="text-gray-300">{item.content}</p>
                     </div>
-                    <div className="text-purple-400 font-bold text-sm mb-2">
-                      {process.step}
-                    </div>
-                    <h3 className="text-white font-semibold mb-2">
-                      {process.title}
-                    </h3>
-                    <p className="text-gray-400 text-sm">
-                      {process.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
         {/* Testimonials Section */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-white mb-4">
-                What Our Clients Say
-              </h2>
-              <p className="text-gray-400 max-w-2xl mx-auto">
-                Don't just take our word for it. Here's what our satisfied
-                clients have to say about our services.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                {
-                  name: "Sarah Johnson",
-                  role: "CEO",
-                  company: "TechStart Inc.",
-                  content:
-                    "Outstanding web development service. They delivered exactly what we needed and more. The team was professional, responsive, and delivered on time.",
-                  rating: 5,
-                },
-                {
-                  name: "Michael Chen",
-                  role: "Product Manager",
-                  company: "InnovateCorp",
-                  content:
-                    "The mobile app exceeded our expectations. Great performance, intuitive design, and excellent user experience. Highly recommended!",
-                  rating: 5,
-                },
-                {
-                  name: "Emily Rodriguez",
-                  role: "Marketing Director",
-                  company: "GrowthCo",
-                  content:
-                    "Their digital marketing strategies helped us increase our online presence by 300%. The ROI has been incredible.",
-                  rating: 5,
-                },
-              ].map((testimonial, index) => (
-                <Card key={index} className="bg-gray-900/50 border-gray-700">
-                  <CardContent className="p-6">
-                    <div className="flex mb-4">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className="h-4 w-4 text-yellow-400 fill-current"
-                        />
-                      ))}
-                    </div>
-                    <p className="text-gray-300 mb-4 italic">
-                      "{testimonial.content}"
-                    </p>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-medium">
-                        {testimonial.name.charAt(0)}
-                      </div>
-                      <div>
-                        <div className="text-white font-medium">
-                          {testimonial.name}
-                        </div>
-                        <div className="text-gray-400 text-sm">
-                          {testimonial.role}, {testimonial.company}
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Contact Section */}
-        <section className="py-16 bg-gray-900/30">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-white mb-4">
-                  Ready to Start Your Project?
-                </h2>
-                <p className="text-gray-400 max-w-2xl mx-auto">
-                  Let's discuss your project requirements and how we can help
-                  bring your vision to life.
+        <section className=" text-white py-20 relative ">
+          <div className="container mx-auto px-6 mt-10">
+            {/* Section Header */}
+            <div className="flex justify-between items-center mb-12">
+              <div>
+                <p className="text-purple-400 uppercase tracking-widest text-sm">
+                  Testimonials
                 </p>
+                <h2 className="text-4xl font-bold">
+                  Trusted <span className="text-white">By Clients</span>
+                </h2>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                {/* Contact Form */}
-                <Card className="bg-gray-900/50 border-gray-700">
-                  <CardHeader>
-                    <CardTitle className="text-white">Get a Quote</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <form onSubmit={handleContactSubmit} className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="text-gray-300 text-sm mb-1 block">
-                            Name *
-                          </label>
-                          <Input
-                            type="text"
-                            value={contactForm.name}
-                            onChange={(e) =>
-                              setContactForm({
-                                ...contactForm,
-                                name: e.target.value,
-                              })
-                            }
-                            className="bg-gray-800 border-gray-600 text-white"
-                            required
-                          />
-                        </div>
-                        <div>
-                          <label className="text-gray-300 text-sm mb-1 block">
-                            Email *
-                          </label>
-                          <Input
-                            type="email"
-                            value={contactForm.email}
-                            onChange={(e) =>
-                              setContactForm({
-                                ...contactForm,
-                                email: e.target.value,
-                              })
-                            }
-                            className="bg-gray-800 border-gray-600 text-white"
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="text-gray-300 text-sm mb-1 block">
-                          Company
-                        </label>
-                        <Input
-                          type="text"
-                          value={contactForm.company}
-                          onChange={(e) =>
-                            setContactForm({
-                              ...contactForm,
-                              company: e.target.value,
-                            })
-                          }
-                          className="bg-gray-800 border-gray-600 text-white"
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="text-gray-300 text-sm mb-1 block">
-                            Service *
-                          </label>
-                          <Select
-                            value={contactForm.service}
-                            onValueChange={(value) =>
-                              setContactForm({ ...contactForm, service: value })
-                            }
-                          >
-                            <SelectTrigger className="bg-gray-800 border-gray-600 text-white">
-                              <SelectValue placeholder="Select a service" />
-                            </SelectTrigger>
-                            <SelectContent className="bg-gray-800 border-gray-600">
-                              {filteredServices.map((service) => (
-                                <SelectItem
-                                  key={service._id}
-                                  value={service.title}
-                                  className="text-white"
-                                >
-                                  {service.title}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <label className="text-gray-300 text-sm mb-1 block">
-                            Budget
-                          </label>
-                          <Select
-                            value={contactForm.budget}
-                            onValueChange={(value) =>
-                              setContactForm({ ...contactForm, budget: value })
-                            }
-                          >
-                            <SelectTrigger className="bg-gray-800 border-gray-600 text-white">
-                              <SelectValue placeholder="Select budget range" />
-                            </SelectTrigger>
-                            <SelectContent className="bg-gray-800 border-gray-600">
-                              <SelectItem
-                                value="under-5000"
-                                className="text-white"
-                              >
-                                &lt; $5,000
-                              </SelectItem>
-                              <SelectItem
-                                value="5000-10000"
-                                className="text-white"
-                              >
-                                $5,000 - $10,000
-                              </SelectItem>
-                              <SelectItem
-                                value="10000-25000"
-                                className="text-white"
-                              >
-                                $10,000 - $25,000
-                              </SelectItem>
-                              <SelectItem
-                                value="25000-plus"
-                                className="text-white"
-                              >
-                                $25,000+
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="text-gray-300 text-sm mb-1 block">
-                          Project Description *
-                        </label>
-                        <Textarea
-                          value={contactForm.message}
-                          onChange={(e) =>
-                            setContactForm({
-                              ...contactForm,
-                              message: e.target.value,
-                            })
-                          }
-                          className="bg-gray-800 border-gray-600 text-white min-h-[120px]"
-                          placeholder="Tell us about your project requirements..."
-                          required
-                        />
-                      </div>
-
-                      <Button
-                        type="submit"
-                        className="w-full bg-purple-600 hover:bg-purple-700"
-                      >
-                        Send Message
-                      </Button>
-                    </form>
-                  </CardContent>
-                </Card>
-
-                {/* Contact Info */}
-                <div className="space-y-8">
-                  <Card className="bg-gray-900/50 border-gray-700">
-                    <CardContent className="p-6">
-                      <h3 className="text-white font-semibold mb-4">
-                        Contact Information
-                      </h3>
-                      <div className="space-y-4">
-                        <div className="flex items-center gap-3">
-                          <Mail className="h-5 w-5 text-purple-400" />
-                          <span className="text-gray-300">
-                            hello@example.com
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <Phone className="h-5 w-5 text-purple-400" />
-                          <span className="text-gray-300">
-                            +1 (555) 123-4567
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <MapPin className="h-5 w-5 text-purple-400" />
-                          <span className="text-gray-300">
-                            San Francisco, CA
-                          </span>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-gray-900/50 border-gray-700">
-                    <CardContent className="p-6">
-                      <h3 className="text-white font-semibold mb-4">
-                        Why Choose Us?
-                      </h3>
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-3">
-                          <CheckCircle className="h-5 w-5 text-green-400" />
-                          <span className="text-gray-300">
-                            10+ Years Experience
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <CheckCircle className="h-5 w-5 text-green-400" />
-                          <span className="text-gray-300">
-                            200+ Successful Projects
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <CheckCircle className="h-5 w-5 text-green-400" />
-                          <span className="text-gray-300">24/7 Support</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <CheckCircle className="h-5 w-5 text-green-400" />
-                          <span className="text-gray-300">
-                            Money-back Guarantee
-                          </span>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-gradient-to-r from-purple-900/50 to-blue-900/50 border-purple-500/30">
-                    <CardContent className="p-6 text-center">
-                      <TrendingUp className="h-12 w-12 text-purple-400 mx-auto mb-3" />
-                      <h3 className="text-white font-semibold mb-2">
-                        Free Consultation
-                      </h3>
-                      <p className="text-gray-300 text-sm mb-4">
-                        Book a free 30-minute consultation to discuss your
-                        project.
-                      </p>
-                      <Button className="bg-purple-600 hover:bg-purple-700">
-                        Schedule Call
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </div>
+              {/* Custom Navigation */}
+              <div className="flex gap-4">
+                <button className="swiper-button-prev-custom w-10 h-10 flex items-center justify-center rounded-full border border-gray-700 bg-neutral-900 hover:bg-purple-500 transition">
+                  <ArrowLeft size={18} />
+                </button>
+                <button className="swiper-button-next-custom w-10 h-10 flex items-center justify-center rounded-full border border-gray-700 bg-neutral-900 hover:bg-purple-500 transition">
+                  <ArrowRight size={18} />
+                </button>
               </div>
             </div>
+
+            {/* Swiper */}
+            <Swiper
+              modules={[Navigation]}
+              navigation={{
+                nextEl: ".swiper-button-next-custom",
+                prevEl: ".swiper-button-prev-custom",
+              }}
+              spaceBetween={30}
+              slidesPerView={3}
+              loop
+              breakpoints={{
+                320: { slidesPerView: 1 },
+                768: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 },
+              }}
+            >
+              {testimonials.map((item, idx) => (
+                <SwiperSlide key={idx}>
+                  <div className="bg-neutral-950 border border-neutral-800 rounded-xl overflow-hidden flex flex-col h-full">
+                    {/* Top Content */}
+                    <div className="px-6 py-10 flex-1">
+                      <h3 className="uppercase text-xs font-semibold tracking-wide mb-4">
+                        {item.title}
+                      </h3>
+                      <p className="text-gray-300 text-xl leading-relaxed">
+                        {item.text}
+                      </p>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="flex items-center gap-4 p-6 border-t rounded-xl border-neutral-800 bg-neutral-900">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-gray-700"
+                      />
+                      <div>
+                        <p className="font-semibold text-white">{item.name}</p>
+                        <p className="text-xs text-gray-400">{item.role}</p>
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </section>
       </div>
