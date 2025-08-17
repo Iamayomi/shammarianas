@@ -50,7 +50,7 @@ export default function Search() {
   const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [showFilters, setShowFilters] = useState(false);
+  // const [showFilters, setShowFilters] = useState(false);
 
   const [filters, setFilters] = useState<SearchFilters>({
     category: searchParams.get("category") || "All Categories",
