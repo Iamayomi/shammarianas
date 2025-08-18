@@ -318,11 +318,12 @@ export default function Services() {
             {/* Section Header */}
             <div className="flex justify-between items-center mb-12">
               <div>
-                <p className="text-purple-400 uppercase tracking-widest text-sm">
+                <p className="text-purple-400 uppercase tracking-widest text-sm mb-4">
                   Testimonials
                 </p>
-                <h2 className="text-4xl font-bold">
-                  Trusted <span className="text-white">By Clients</span>
+                <h2 className="text-4xl uppercase font-bold">
+                  Trusted{" "}
+                  <span className="text-white font-medium">By Clients</span>
                 </h2>
               </div>
 

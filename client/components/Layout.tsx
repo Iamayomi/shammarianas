@@ -65,20 +65,22 @@ export default function Layout({ children }: LayoutProps) {
   // If user is NOT logged in
   if (user) {
     return (
-      <div className="min-h-screen bg-background ">
-        <nav className="bg-black text-white shadow-md">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-background">
+        <nav className="text-white shadow-md border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
             <div className="flex justify-between h-16 items-center">
               {/* Logo */}
-              <Link to="/" className="flex items-center space-x-2">
+              <Link to="/" className="flex items-center space-x-2 p-3 border-r">
                 <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-lg">DM</span>
                 </div>
-                <span className="text-xl font-semibold">Sham Marianas</span>
+                <span className="text-xl font-semibold pr-4">
+                  Sham Marianas
+                </span>
               </Link>
 
               {/* Desktop Menu */}
-              <div className="hidden md:flex space-x-8">
+              <div className="hidden md:flex space-x-8 text-sm uppercase font-semibold">
                 <Link to="/" className="hover:text-gray-00">
                   Home
                 </Link>
@@ -100,8 +102,11 @@ export default function Layout({ children }: LayoutProps) {
               </div>
 
               {/* Sign In Button */}
-              <div className="hidden md:block">
-                <Link to="/login" className=" text-white px-4 py-2 rounded-md">
+              <div className="hidden md:block p-2 border-l">
+                <Link
+                  to="/login"
+                  className="block bg-purple-400 text-white px-4 py-2 ml-9 rounded-md mt-2 "
+                >
                   Sign In
                 </Link>
               </div>
@@ -162,8 +167,8 @@ export default function Layout({ children }: LayoutProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
               {/* Logo Section */}
               <div className="lg:col-span-1">
-                <div className="flex items-center space-x-2 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
+                <div className="flex items-center space-x-2 mb-6 ">
+                  <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center ">
                     <span className="text-white font-bold text-lg">DM</span>
                   </div>
                   <span className="font-bold text-xl text-foreground">
@@ -311,62 +316,64 @@ export default function Layout({ children }: LayoutProps) {
   // If user IS logged in
   return (
     <div className="min-h-screen bg-background">
-      <div className="navbar navbar-expand-lg bord">
-        <Link className="logo icon-img-100" to="/">
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">DM</span>
-            </div>
-            <span className="logo-text">shammarianas</span>
+      <div className="bg-background shadow-md">
+        <div className="flex items-center justify-between px-4 py-3 md:px-8">
+          {/* Logo */}
+          <div className="ml-2 pl-8">
+            <Link className="flex items-center space-x-4" to="/">
+              <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-lg">DM</span>
+              </div>
+              <span className="logo-text font-semibold">shammarianas</span>
+            </Link>
           </div>
-        </Link>
 
-        <Link to="/explore">
-          <div className="ml-auto vi-more">
-            <span className="butn butn-sm butn-bord radius-30">
-              <span>Explore</span>
-            </span>
-            <span className="icon ti-arrow-top-right"></span>
-          </div>
-        </Link>
-
-        {/* <SearchComponent /> */}
-        <form onSubmit={handleSearch} className="ml-6 flex items-center">
-          <SearchIcon className="search-icon m-4 text-gray-400" />
-
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search assets...."
-            className="px-6 py-2 bg-gray-200 rounded-l-md text-black focus:outline-none"
-          />
-          <button
-            type="submit"
-            className="bg-purple-600 px-3 py-2 rounded-r-md text-white hover:bg-purple-600"
-          >
-            Go
-          </button>
-        </form>
-
-        <div className="right">
-          <div className="nav_buttons">
-            <Link to="/dashboard">
-              <button>
-                <ShoppingCart className="icon h-5 w-5" />
-                {cartCount > 0 && (
-                  <span className="cart_count">{cartCount}</span>
-                )}
-              </button>
+          {/* Desktop Nav */}
+          <div className=" hidden md:flex items-center md:space-x-48 m-auto">
+            <Link to="/explore">
+              <span className="butn butn-sm butn-bord radius-30 border border-gray-300 px-4 py-2 rounded-full hover:bg-gray-100">
+                Explore
+              </span>
             </Link>
 
-            <div className="navbar_dropdown">
+            {/* Search */}
+            <form onSubmit={handleSearch} className="flex items-center">
+              <Search className="m-8 text-gray-400" size={24} />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search assets..."
+                className="px-6 py-2 bg-gray-200 rounded-l-md text-black focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="bg-purple-600 px-3 py-2 rounded-r-md text-white hover:bg-purple-700"
+              >
+                Go
+              </button>
+            </form>
+
+            {/* Right Side */}
+            <div className="flex items-center space-x-4">
+              <Link to="/dashboard">
+                <button className="relative">
+                  <ShoppingCart className="h-5 w-5" />
+                  {cartCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-xs text-white rounded-full px-1">
+                      {cartCount}
+                    </span>
+                  )}
+                </button>
+              </Link>
+
+              {/* User Dropdown */}
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <button className="signed_in">
-                      <User className="icon h-4 w-4" />
-                      <span className="username">{user.name || "User"}</span>
+                    <button className="flex items-center space-x-1">
+                      <User className="h-4 w-4" />
+                      <span>{user.name || "User"}</span>
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="dropdown">
@@ -394,12 +401,76 @@ export default function Layout({ children }: LayoutProps) {
                 </DropdownMenu>
               ) : (
                 <Link to="/login">
-                  <button>Sign In</button>
+                  <button className="border px-4 py-2 rounded-lg">
+                    Sign In
+                  </button>
                 </Link>
               )}
             </div>
           </div>
+
+          {/* Mobile Hamburger */}
+          <button
+            className="md:hidden focus:outline-none"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
+
+        {/* Mobile Menu */}
+        {isOpen && (
+          <div className="md:hidden px-4 pb-4 space-y-3">
+            <Link to="/explore" className="block text-gray-300">
+              Explore
+            </Link>
+            <form onSubmit={handleSearch} className="flex items-center">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search assets..."
+                className="flex-1 px-4 py-2 bg-gray-200 rounded-l-md text-black focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="bg-purple-600 px-3 py-2 rounded-r-md text-white hover:bg-purple-700"
+              >
+                Go
+              </button>
+            </form>
+            <Link to="/dashboard" className="block">
+              Dashboard
+            </Link>
+            {user ? (
+              <>
+                <Link to="/dashboard" className="block">
+                  My Downloads
+                </Link>
+                <Link to="/dashboard" className="block">
+                  My Favorites
+                </Link>
+                <Link to="/support" className="block">
+                  Support
+                </Link>
+                {user.role === "admin" && (
+                  <Link to="/admin" className="block">
+                    Admin Panel
+                  </Link>
+                )}
+                <button onClick={handleLogout} className="block text-red-500">
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link to="/login" className="block">
+                <button className="bg-purple-600 text-white px-4 py-2 w-full rounded-md hover:bg-purple-700">
+                  Sign In
+                </button>
+              </Link>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Bottom Bar for specific pages */}
